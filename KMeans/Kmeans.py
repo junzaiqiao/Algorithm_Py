@@ -12,10 +12,10 @@ kmeans的计算方法如下：
 其中m为每个元素字段个数，n为数据量，I为迭代次数。一般I,K,m均可认为是常量，所以时间和空间复杂度可以简化为O(n)，即线性的。
 '''
 from random import *
-import linecache
 import re
 import math
 import time
+import copy
 
 
 class Kmeans:
@@ -96,7 +96,6 @@ class Kmeans:
                 j+=1
             center_dataplus_dict['num'+'_'+id]+=1
 
-
         
         newcenterdict=dict()
         
@@ -151,29 +150,35 @@ class Kmeans:
     * @return list() 打上标签的数据
     '''
     def analyseKmeans(self,analine):
-        ab=0.0
-        a=0.0
-        b=0.0
+        cos_res=0
+        clisttmp=0
         max_cos=0.0
         data_cos=list()
+        
         analine=analine.split(',')
+
         maxdatadict={'max':0.0,'data':{}}
         
-        for clist in self.centerdict.keys():       
+        for clist in self.centerdict.keys():
+            ab=0.0
+            a=0.0
+            b=0.0
             for al,bl in zip(analine[1:], self.centerdict[clist] ): 
                 ab+=float(al)*float(bl)
                 a+=pow(float(al),2)
                 b+=pow(float(bl),2)
-                
             tmpsqrt=math.sqrt(a*b)
+            
             #判断分母是否为0
             if( tmpsqrt != 0  ):
                 cos_res=ab/tmpsqrt
+                
                 #保留与K个中心距离最近的数据
-                if( cos_res >= float(max_cos) ):
+                if( cos_res > float(max_cos) ):
                     max_cos=cos_res
                     data_cos=analine[1:]
                     clisttmp=clist
+
 
         maxdatadict['max']=max_cos
         maxdatadict['data'][analine[0]+'_'+str(clisttmp).split('_')[1]]=data_cos
@@ -200,27 +205,22 @@ class Kmeans:
                 for tmpdictkey in tmpdict:
                     cpudatadict[tmpdictkey]=tmpdict[tmpdictkey]
                 tmpdict.clear()
-            
             newcenter=self.computerKmeans(cpudatadict)
-            print newcenter
+
             #新老中心比对，并将新的中心覆盖调旧的
             self.compareCenter(newcenter, self.centerdict)
                     
             m+=1
             f.seek(0)
-            print cpudatadict
+            print "center="+str(kmeans.centerdict)
+            print "data="+str(cpudatadict)
+            cpudatadict.clear()
     
 
 
 if __name__=='__main__':
+    
     kmeans=Kmeans()
     
     kmeans.runKmeans()
     
-    
-    
-
-
-
-
-
