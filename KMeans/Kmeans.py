@@ -119,7 +119,7 @@ class Kmeans:
         return  newcenterdict     
 
     '''
-    * 比较新的中心点和旧的中心位置是否一直不一致则替换
+    * 比较新的中心点和旧的中心位置是否一致不一致则替换
     * 处理输入条件 
     * @param newcenter:dict(), oldcenter:dict()
     * @return None
