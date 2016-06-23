@@ -1,6 +1,7 @@
 #coding=utf-8
 
 '''
+@introduce :
 算法原理
 kmeans的计算方法如下：
 1 随机选取K个中心点
@@ -10,6 +11,9 @@ kmeans的计算方法如下：
 时间复杂度：O(I*n*K*m)
 空间复杂度：O(n*m)
 其中m为每个元素字段个数，n为数据量，I为迭代次数。一般I,K,m均可认为是常量，所以时间和空间复杂度可以简化为O(n)，即线性的。
+
+@author : lisj 
+@create :  2016-06-21
 '''
 from random import *
 import re
