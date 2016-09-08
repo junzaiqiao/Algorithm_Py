@@ -15,6 +15,7 @@ kmeans的计算方法如下：
 @author : lisj 
 @create :  2016-06-21
 '''
+
 from random import *
 import re
 import math
@@ -31,9 +32,9 @@ class Kmeans:
     centercheck=dict()
     
     def __init__(self):
-        self.K=3
-        self.I=10
-        self.W=14
+        self.K=5
+        self.I=100
+        self.W=6
         ret=self.selectCenter(self.K)
         if( ret['status'] == True ):
             self.check=False
@@ -42,7 +43,7 @@ class Kmeans:
     def selectCenter(self,K):
         p=re.compile('\s+')
         result=dict()
-        filename="../data/kmdata.txt"
+        filename="../data/kmdata1.txt"
         f=open(filename,'r')
         num=0
         for line in f:
@@ -123,7 +124,7 @@ class Kmeans:
         return  newcenterdict     
 
     '''
-    * 比较新的中心点和旧的中心位置是否一致不一致则替换
+    * 比较新的中心点和旧的中心位置是否一直不一致则替换
     * 处理输入条件 
     * @param newcenter:dict(), oldcenter:dict()
     * @return None
@@ -167,6 +168,7 @@ class Kmeans:
             ab=0.0
             a=0.0
             b=0.0
+            
             for al,bl in zip(analine[1:], self.centerdict[clist] ): 
                 ab+=float(al)*float(bl)
                 a+=pow(float(al),2)
@@ -177,14 +179,19 @@ class Kmeans:
             if( tmpsqrt != 0  ):
                 cos_res=ab/tmpsqrt
                 
-                #保留与K个中心距离最近的数据
+            #保留与K个中心距离最近的数据
                 if( cos_res > float(max_cos) ):
                     max_cos=cos_res
                     data_cos=analine[1:]
                     clisttmp=clist
+            else:
+                max_cos=0
+                data_cos=analine[1:]
+                clisttmp=clist
 
-
+            
         maxdatadict['max']=max_cos
+
         maxdatadict['data'][analine[0]+'_'+str(clisttmp).split('_')[1]]=data_cos
 
         return maxdatadict['data']
@@ -193,7 +200,7 @@ class Kmeans:
 
     
     def runKmeans(self):
-        filename="../data/kmdata.txt"
+        filename="../data/kmdata1.txt"
         
         f = open( filename,'r' )
         p=re.compile('\s+')
@@ -217,8 +224,9 @@ class Kmeans:
             m+=1
             f.seek(0)
             print "center="+str(kmeans.centerdict)
-            print "data="+str(cpudatadict)
+#             print "data="+str(cpudatadict)
             cpudatadict.clear()
+#             time.sleep(1)
     
 
 
@@ -228,3 +236,10 @@ if __name__=='__main__':
     
     kmeans.runKmeans()
     
+    
+    
+
+
+
+
+
